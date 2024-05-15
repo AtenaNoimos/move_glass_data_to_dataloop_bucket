@@ -1,0 +1,48 @@
+
+dataset_info:
+  target_garage: "pilot_garages" # could be either ´pilot_garages´, ´desa´, ´car_glass´, `C2C-Garage`, `sams_autoglass`, "Axa_France", `
+  data_type: "detail" # windshield or detail
+  dataloop_dataset_folder_prefix: "glass_noicom/"
+
+
+
+data_ingestion:
+  project_id: "512580047534"
+  region: "europe-west4"
+  BQ_query_name_pilot_garages: "glass_evaluation.mart_app_glass_pilot_garages_cases"
+  BQ_query_name_desa: "glass_evaluation.mart_app_glass_desa_cases"
+  BQ_query_name_car_glass: "glass_evaluation.mart_app_glass_Carglass_cases"
+  BQ_query_name_sams_autoglass: "glass_evaluation.mart_app_glass_sams_autoglass_cases"
+  BQ_query_name_C2C-Garage: "glass_evaluation.mart_app_glass_c2c_garage_cases"
+  BQ_query_name_C2C-Customer: "glass_evaluation.mart_app_glass_c2c_customer_cases"
+  BQ_query_name_Axa_France: "glass_evaluation.mart_app_glass_Axa_France_cases"
+
+
+bucket_info:
+  source_project_name: "noimos-data-lake-exp"
+  source_bucket_name: "noimos-data-lake-dataloop-glass-anonymized"
+  destination_project_name: "noimos-data-lake"
+  destination_bucket_name: "noimos-data-lake-dataloop"
+
+preprocessing:
+  columns_to_keep: ["claimId", "imageId", "type", "storageURI", "deletedAt", "createdAt"]
+  column_type_mapping:
+    imageId: str
+    type: str
+    storageURI: str
+    deletedAt: datetime64[ns]
+    imageToLabelData: object
+  image_type_mapping:
+    fullview_include_types_mapping:
+      windshield: windshield
+      # Legacy portal to noicom mapping
+      general1: windshield
+    closeup_exclude_types:
+      - greycard
+      - vehicle_id
+      - front_view
+      - windshield
+      - general1
+      - general2
+      - costEstimation
+      - cost_estimate
